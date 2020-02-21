@@ -21,7 +21,7 @@ class AboutScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('版本: 1.0.0 (build 20200301)'),
+              child: Text('版本: 1.1.0 (build 20200219)'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
@@ -42,10 +42,10 @@ class AboutScreen extends StatelessWidget {
                   Text('原始碼: '),
                   GestureDetector(
                     onTap: () {
-                      launch('https://firecodev.github.io/');
+                      launch('https://github.com/firecodev/ccu_toolbox');
                     },
                     child: Text(
-                      'https://firecodev.github.io/',
+                      'https://github.com/firecodev/ccu_toolbox',
                       style: TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,
@@ -88,6 +88,40 @@ class AboutScreen extends StatelessWidget {
                     },
                     child: Text(
                       'Pixabay',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Row(
+                children: <Widget>[
+                  Text('File icons: By '),
+                  GestureDetector(
+                    onTap: () {
+                      launch(
+                          'https://www.flaticon.com/authors/dimitry-miroliubov');
+                    },
+                    child: Text(
+                      'Dimitry Miroliubov',
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  Text(' from '),
+                  GestureDetector(
+                    onTap: () {
+                      launch('https://www.flaticon.com');
+                    },
+                    child: Text(
+                      'www.flaticon.com',
                       style: TextStyle(
                         color: Colors.blue,
                         decoration: TextDecoration.underline,

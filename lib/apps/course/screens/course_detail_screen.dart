@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../widgets/discussions_widget.dart';
 import '../widgets/scores_widget.dart';
 import '../widgets/assignments_widget.dart';
+import '../widgets/resources_widget.dart';
 import '../widgets/about_widget.dart';
 import '../models/course.dart';
 
@@ -12,7 +13,7 @@ class CourseDetailScreen extends StatelessWidget {
     final Course course = ModalRoute.of(context).settings.arguments;
 
     return DefaultTabController(
-      length: 4,
+      length: 5,
       child: Scaffold(
         appBar: AppBar(
           title: Text(course.name),
@@ -53,17 +54,17 @@ class CourseDetailScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              // Tab(
-              //   child: FittedBox(
-              //     fit: BoxFit.contain,
-              //     child: Column(
-              //       children: <Widget>[
-              //         Icon(Icons.people),
-              //         Text('點名'),
-              //       ],
-              //     ),
-              //   ),
-              // ),
+              Tab(
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Column(
+                    children: <Widget>[
+                      Icon(Icons.folder),
+                      Text('檔案'),
+                    ],
+                  ),
+                ),
+              ),
               Tab(
                 child: FittedBox(
                   fit: BoxFit.contain,
@@ -83,7 +84,7 @@ class CourseDetailScreen extends StatelessWidget {
             DiscussionsWidget(course.moodleId),
             ScoresWidget(course.moodleId),
             AssignmentsWidget(course.moodleId),
-            // Text('點名'),
+            ResourcesWidget(course.moodleId),
             AboutWidget(course),
           ],
         ),

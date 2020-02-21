@@ -1,16 +1,28 @@
-# ccu_toolbox
+# CCU Toolbox
 
-A new Flutter project.
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+### 目前功能 Feature
 
-A few resources to get you started if this is your first Flutter project:
+- eCourse2 (公告、成績、作業、檔案)
+- 課表
+- 行事曆 ( 版本 : 109.02.12)
+- 公車、火車資訊
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+### 最新版本 What's news
+
+#### 1.1.0
+
+Feb 19, 2020
+
++) 課程詳細資訊新增"檔案"分頁
+
+*) 修正"關於"中的原始碼網址
+
+#### 1.0.0
+
+Feb 18, 2020
+
++) 正式版發布

@@ -7,6 +7,7 @@ import '../models/discussion.dart';
 import '../models/score.dart';
 import '../models/assignment.dart';
 import '../models/attachment.dart';
+import '../models/resource.dart';
 
 Future<List<Discussion>> getDiscussions(int courseid, String token) async {
   if (courseid == 0) {
@@ -238,6 +239,56 @@ Future<AssignmentFeedback> getAssignmentFeedback(
               [0]['text']
           .toString(),
     );
+
+    return result;
+  } catch (error) {
+    throw error;
+  }
+}
+
+Future<List<List<dynamic>>> getResourceListInTopics(
+    int courseid, String token) async {
+  if (courseid == 0) {
+    throw 'invalid courseid';
+  }
+
+  try {
+    final restUrl = 'https://ecourse2.ccu.edu.tw/webservice/rest/server.php';
+    final resourcesResponse = await http.post(restUrl, body: {
+      'courseid': courseid.toString(),
+      'moodlewssettingfilter': 'true',
+      'moodlewssettingfileurl': 'true',
+      'moodlewsrestformat': 'json',
+      'wsfunction': 'core_course_get_contents',
+      'wstoken': token,
+    });
+
+    final tempResponseDecoded =
+        jsonDecode(resourcesResponse.body); // as List<Map<String, Object>>
+
+    List<List<dynamic>> result = []; // List<List<[String, List<Resource>]>>
+
+    tempResponseDecoded.forEach((tempTopic) {
+      List<Resource> tempResourceList = [];
+      tempTopic['modules']
+          .where((test) => test['modname'] == 'resource')
+          .forEach((res) {
+        res['contents'].forEach((file) {
+          tempResourceList.add(Resource(
+            name: HtmlCharacterEntities.decode(res['name']),
+            attachment: Attachment(
+              filename: file['filename'],
+              filesize: file['filesize'],
+              fileurl: file['fileurl'],
+              timemodified: file['timemodified'],
+              mimetype: file['mimetype'],
+              isexternalfile: file['isexternalfile'],
+            ),
+          ));
+        });
+      });
+      result.add([HtmlCharacterEntities.decode(tempTopic['name']), tempResourceList]);
+    });
 
     return result;
   } catch (error) {

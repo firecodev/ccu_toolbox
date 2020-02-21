@@ -11,7 +11,7 @@ description: A new Flutter project.
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.1.0+2
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
@@ -30,6 +30,7 @@ dependencies:
   flutter_widgets: ^0.1.10
   table_calendar: ^2.2.2
   csv: ^4.0.3
+  flutter_svg: ^0.17.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -63,6 +64,46 @@ flutter:
   assets:
    - assets/images/20191128_175222.jpg
    - assets/schedule/108_schedule.csv
+   - assets/images/file_extension_icon/3ds.svg
+   - assets/images/file_extension_icon/aac.svg
+   - assets/images/file_extension_icon/ai.svg
+   - assets/images/file_extension_icon/avi.svg
+   - assets/images/file_extension_icon/bmp.svg
+   - assets/images/file_extension_icon/cad.svg
+   - assets/images/file_extension_icon/cdr.svg
+   - assets/images/file_extension_icon/css.svg
+   - assets/images/file_extension_icon/dat.svg
+   - assets/images/file_extension_icon/dll.svg
+   - assets/images/file_extension_icon/dmg.svg
+   - assets/images/file_extension_icon/doc.svg
+   - assets/images/file_extension_icon/eps.svg
+   - assets/images/file_extension_icon/fla.svg
+   - assets/images/file_extension_icon/flv.svg
+   - assets/images/file_extension_icon/gif.svg
+   - assets/images/file_extension_icon/html.svg
+   - assets/images/file_extension_icon/indd.svg
+   - assets/images/file_extension_icon/iso.svg
+   - assets/images/file_extension_icon/jpg.svg
+   - assets/images/file_extension_icon/js.svg
+   - assets/images/file_extension_icon/midi.svg
+   - assets/images/file_extension_icon/mov.svg
+   - assets/images/file_extension_icon/mp3.svg
+   - assets/images/file_extension_icon/mpg.svg
+   - assets/images/file_extension_icon/pdf.svg
+   - assets/images/file_extension_icon/php.svg
+   - assets/images/file_extension_icon/png.svg
+   - assets/images/file_extension_icon/ppt.svg
+   - assets/images/file_extension_icon/ps.svg
+   - assets/images/file_extension_icon/psd.svg
+   - assets/images/file_extension_icon/raw.svg
+   - assets/images/file_extension_icon/sql.svg
+   - assets/images/file_extension_icon/svg.svg
+   - assets/images/file_extension_icon/tif.svg
+   - assets/images/file_extension_icon/txt.svg
+   - assets/images/file_extension_icon/wmv.svg
+   - assets/images/file_extension_icon/xls.svg
+   - assets/images/file_extension_icon/xml.svg
+   - assets/images/file_extension_icon/zip.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
