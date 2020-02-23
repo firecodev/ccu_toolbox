@@ -232,7 +232,7 @@ class CourseData with ChangeNotifier {
 
       // get courses data
       final viewUrl =
-      'https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Selected_View00.cgi?year=$year&term=$term&session_id=$sessionid';
+          'https://kiki.ccu.edu.tw/~ccmisp06/cgi-bin/class_new/Selected_View00.cgi?year=$year&term=$term&session_id=$sessionid';
       final viewResponse = await http.get(viewUrl);
       final viewResponseUtf8 = utf8.decode(viewResponse.bodyBytes);
 

@@ -67,40 +67,44 @@ class AssignmentDetailScreen extends StatelessWidget {
               SizedBox(
                 height: 10.0,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(
-                      DateFormat('開始日期: yyyy年MM月dd日 HH:mm:ss').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              assignment.allowsubmissionsfromdate * 1000)),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15.0,
-                      ),
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: Text(
+                  DateFormat('開始日期: yyyy年MM月dd日 HH:mm:ss').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          assignment.allowsubmissionsfromdate * 1000)),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15.0,
                   ),
-                ],
+                ),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: Text(
-                      DateFormat('截止日期: yyyy年MM月dd日 HH:mm:ss').format(
-                          DateTime.fromMillisecondsSinceEpoch(
-                              assignment.duedate * 1000)),
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 15.0,
-                      ),
-                    ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5.0),
+                child: Text(
+                  DateFormat('截止日期: yyyy年MM月dd日 HH:mm:ss').format(
+                      DateTime.fromMillisecondsSinceEpoch(
+                          assignment.duedate * 1000)),
+                  style: TextStyle(
+                    color: Colors.grey,
+                    fontSize: 15.0,
                   ),
-                ],
+                ),
               ),
+              assignment.cutoffdate != 0
+                  ? (Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: Text(
+                        DateFormat('拒收日期: yyyy年MM月dd日 HH:mm:ss').format(
+                            DateTime.fromMillisecondsSinceEpoch(
+                                assignment.cutoffdate * 1000)),
+                        style: TextStyle(
+                          color: Colors.grey,
+                          fontSize: 15.0,
+                        ),
+                      ),
+                    ))
+                  : (Container()),
               Divider(
                 height: 15.0,
                 thickness: 1.0,
@@ -178,10 +182,10 @@ class _AssignmentFeedbackWidgetState extends State<AssignmentFeedbackWidget> {
   Future<void> _refresh() async {
     List<Widget> tempWidgetList = [];
     try {
-      final String token =
-          await Provider.of<UserData>(context, listen: false).getEcourse2Token();
-      final int userid =
-          await Provider.of<UserData>(context, listen: false).getEcourse2Userid(token);
+      final String token = await Provider.of<UserData>(context, listen: false)
+          .getEcourse2Token();
+      final int userid = await Provider.of<UserData>(context, listen: false)
+          .getEcourse2Userid(token);
       final feedback =
           await ecourse2.getAssignmentFeedback(widget.assignid, userid, token);
 

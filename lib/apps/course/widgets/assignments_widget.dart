@@ -45,7 +45,7 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget>
       List<Widget> tempAssignmentWidgetList = [];
       assignmentList.forEach((assignment) {
         tempAssignmentWidgetList.add(Container(
-          margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
+          margin: const EdgeInsets.symmetric(vertical: 5.0),
           child: Card(
             elevation: 3,
             child: ListTile(
@@ -53,10 +53,16 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget>
                 assignment.name,
                 overflow: TextOverflow.ellipsis,
               ),
-              subtitle: Text('截止日 ' +
-                  DateFormat('yyyy-MM-dd HH:mm:ss').format(
+              subtitle: Row(
+                children: <Widget>[
+                  Icon(Icons.alarm,
+                      color: Color.fromRGBO(0, 0, 0, 0.54), size: 15.0),
+                  SizedBox(width: 5.0),
+                  Text(DateFormat('yyyy-MM-dd').format(
                       DateTime.fromMillisecondsSinceEpoch(
                           assignment.duedate * 1000))),
+                ],
+              ),
               onTap: () {
                 Navigator.of(context).pushNamed(
                     '/apps/course/course-detail/assignment-detail',
@@ -124,6 +130,8 @@ class _AssignmentsWidgetState extends State<AssignmentsWidget>
                     ),
                   )
                 : ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0, horizontal: 8.0),
                     itemCount: _assignmentWidgetList.length,
                     itemBuilder: (ctx, index) => _assignmentWidgetList[index],
                   );

@@ -10,6 +10,7 @@ class Discussion {
   final String userpictureurl;
   final bool attachment;
   final List<Attachment> attachments;
+  final bool pinned;
 
   Discussion({
     @required this.id,
@@ -20,5 +21,6 @@ class Discussion {
     this.userpictureurl = '',
     this.attachment = false,
     this.attachments,
+    this.pinned = false,
   });
 }

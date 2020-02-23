@@ -67,6 +67,7 @@ Future<List<Discussion>> getDiscussions(int courseid, String token) async {
         userpictureurl: tempDiscussion['userpictureurl'].toString(),
         attachment: tempDiscussion['attachment'],
         attachments: tempAttachmentList,
+        pinned: tempDiscussion['pinned'],
       ));
     });
 
@@ -287,7 +288,8 @@ Future<List<List<dynamic>>> getResourceListInTopics(
           ));
         });
       });
-      result.add([HtmlCharacterEntities.decode(tempTopic['name']), tempResourceList]);
+      result.add(
+          [HtmlCharacterEntities.decode(tempTopic['name']), tempResourceList]);
     });
 
     return result;

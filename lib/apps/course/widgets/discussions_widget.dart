@@ -44,10 +44,66 @@ class _DiscussionsWidgetState extends State<DiscussionsWidget>
       final String token = await Provider.of<UserData>(context, listen: false)
           .getEcourse2Token();
       final discussionList = await _getDiscussions(widget.courseid, token);
-      List<Widget> tempDiscussionWidgetList = [];
+      List<Discussion> pinnedDiscussions = [];
+      List<Discussion> generalDiscussions = [];
       discussionList.forEach((discussion) {
+        if (discussion.pinned) {
+          pinnedDiscussions.add(discussion);
+        } else {
+          generalDiscussions.add(discussion);
+        }
+      });
+      List<Widget> tempDiscussionWidgetList = [];
+      if (pinnedDiscussions.isNotEmpty) {
+        tempDiscussionWidgetList.add(
+          Row(
+            children: <Widget>[
+              Icon(
+                Icons.flag,
+                color: Colors.grey,
+              ),
+              Text(
+                '置頂',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ],
+          ),
+        );
+        pinnedDiscussions.forEach((discussion) {
+          tempDiscussionWidgetList.add(Container(
+            margin: const EdgeInsets.symmetric(vertical: 5.0),
+            child: Card(
+              elevation: 3,
+              child: ListTile(
+                leading: CircleAvatar(
+                  backgroundImage: NetworkImage(discussion.userpictureurl),
+                ),
+                title: Text(
+                  discussion.name,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text(DateFormat('yyyy-MM-dd').format(
+                    DateTime.fromMillisecondsSinceEpoch(
+                        discussion.time * 1000))),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                      '/apps/course/course-detail/discussion-detail',
+                      arguments: discussion);
+                },
+              ),
+            ),
+          ));
+        });
+        tempDiscussionWidgetList.add(
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Divider(thickness: 1.0, height: 1.0),
+          ),
+        );
+      }
+      generalDiscussions.forEach((discussion) {
         tempDiscussionWidgetList.add(Container(
-          margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 3.0),
+          margin: const EdgeInsets.symmetric(vertical: 5.0),
           child: Card(
             elevation: 3,
             child: ListTile(
@@ -69,6 +125,7 @@ class _DiscussionsWidgetState extends State<DiscussionsWidget>
           ),
         ));
       });
+
       _discussionWidgetList = tempDiscussionWidgetList;
       setState(() {
         _loadFailed = false;
@@ -127,6 +184,8 @@ class _DiscussionsWidgetState extends State<DiscussionsWidget>
                     ),
                   )
                 : ListView.builder(
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 5.0, horizontal: 8.0),
                     itemCount: _discussionWidgetList.length,
                     itemBuilder: (ctx, index) => _discussionWidgetList[index],
                   );
