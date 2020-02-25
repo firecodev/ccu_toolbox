@@ -36,25 +36,40 @@ class CourseData with ChangeNotifier {
 
   Future<void> updateAllWidgets(BuildContext context) async {
     updateStatusIndicatorWidget(true, false, context);
+    int _hasError = 0;
+    _tempCourseList = {};
+
     try {
-      _tempCourseList = {};
       await updateCoursesFromEcourse(context);
-      await updateCoursesFromKiki(context);
-      _courseList = _tempCourseList;
-      buildTimetableFromCourseList();
-      updateCourseListWidget(context);
-      updateTimetableWidget();
     } catch (error) {
       if (error == 2 || error == 3) {
         updateStatusIndicatorWidget(false, true, context);
         Navigator.of(context).pushReplacementNamed('/apps/course/auth',
             arguments: '/apps/course');
+        return;
       } else {
-        updateStatusIndicatorWidget(false, true, context);
+        _hasError++;
       }
-      return;
     }
-    updateStatusIndicatorWidget(false, false, context);
+
+    try {
+      await updateCoursesFromKiki(context);
+    } catch (error) {
+      _hasError++;
+    }
+
+    if (_hasError < 2) {
+      _courseList = _tempCourseList;
+      buildTimetableFromCourseList();
+      updateCourseListWidget(context);
+      updateTimetableWidget();
+    }
+
+    if (_hasError == 0) {
+      updateStatusIndicatorWidget(false, false, context);
+    } else {
+      updateStatusIndicatorWidget(false, true, context);
+    }
   }
 
   void updateStatusIndicatorWidget(
@@ -167,6 +182,8 @@ class CourseData with ChangeNotifier {
       final token = await Provider.of<UserData>(context, listen: false)
           .getEcourse2Token();
 
+      // throw 'network error'; // this is for debugging
+
       final restUrl = 'https://ecourse2.ccu.edu.tw/webservice/rest/server.php';
       final response = await http.post(restUrl, body: {
         'classification': 'inprogress',
@@ -229,6 +246,8 @@ class CourseData with ChangeNotifier {
       final username = usrAndPwd['username'];
       final password = usrAndPwd['password'];
       final sessionid = await kiki.getSessionid(username, password);
+
+      // throw 'network error'; // this is for debugging
 
       // get courses data
       final viewUrl =
