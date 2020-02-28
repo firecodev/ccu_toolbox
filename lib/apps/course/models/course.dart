@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class Course {
   Course({
@@ -13,6 +13,7 @@ class Course {
     this.courseType = 'Unknown', //必修
     this.location = 'Unknown', //工學院A館101
     this.period = 'Unknown', //二E 四E
+    this.color = Colors.grey,
   });
 
   final String idnumber;
@@ -26,4 +27,5 @@ class Course {
   String courseType;
   String location;
   String period;
+  Color color;
 }

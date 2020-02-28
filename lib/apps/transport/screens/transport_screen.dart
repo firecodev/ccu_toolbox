@@ -108,7 +108,7 @@ class _TypeMenuState extends State<TypeMenu> {
   @override
   Widget build(BuildContext context) {
     final transportData = Provider.of<TransportData>(context, listen: false);
-    return DropdownButton<int>(
+    return DropdownButton<TransportType>(
       value: transportData.getSelectedTransport,
       icon: Icon(Icons.arrow_drop_down),
       iconSize: 24,
@@ -117,14 +117,14 @@ class _TypeMenuState extends State<TypeMenu> {
         height: 2,
         color: Colors.amber,
       ),
-      onChanged: (int newValue) {
+      onChanged: (TransportType newValue) {
         setState(() {
           transportData.updateAllWidgets(selectedTransport: newValue);
         });
       },
       itemHeight: 85.0,
       items: transportData.type.map((type) {
-        return DropdownMenuItem<int>(
+        return DropdownMenuItem<TransportType>(
           value: type[0],
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),

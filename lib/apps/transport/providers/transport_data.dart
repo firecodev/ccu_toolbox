@@ -11,8 +11,13 @@ import '../models/train.dart';
 import '../widgets/timeline.dart';
 import '../widgets/liveboard.dart';
 
+enum TransportType {
+  bus,
+  train,
+}
+
 class TransportData with ChangeNotifier {
-  int _selectedTransport = 0; // 0 = Bus, 1 = Train
+  TransportType _selectedTransport = TransportType.bus; // 0 = Bus, 1 = Train
   String _busRouteNo = '0746';
   int _busGoBack = 1;
   String _trainStationID = '4060';
@@ -21,8 +26,8 @@ class TransportData with ChangeNotifier {
   int _seq = 0;
 
   final List<List> type = [
-    [0, '公車'],
-    [1, '火車'],
+    [TransportType.bus, '公車'],
+    [TransportType.train, '火車'],
   ];
 
   final List<List<String>> busRoutes = [
@@ -38,7 +43,7 @@ class TransportData with ChangeNotifier {
     ['4080', '嘉義火車站', '順行', '逆行'],
   ];
 
-  int get getSelectedTransport {
+  TransportType get getSelectedTransport {
     return _selectedTransport;
   }
 
@@ -51,17 +56,17 @@ class TransportData with ChangeNotifier {
 
   Future<void> switchDirection() async {
     switch (_selectedTransport) {
-      case 0:
+      case TransportType.bus:
         _busGoBack = _busGoBack == 1 ? 2 : 1;
         break;
-      case 1:
+      case TransportType.train:
         _trainDirection = _trainDirection == 0 ? 1 : 0;
     }
     await updateAllWidgets();
   }
 
   Future<void> updateAllWidgets({
-    int selectedTransport,
+    TransportType selectedTransport,
     String busRouteNo,
     int busGoBack,
     String trainStationID,
@@ -107,7 +112,7 @@ class TransportData with ChangeNotifier {
   }
 
   void updateRouteAndStationWidget({
-    int selectedTransport,
+    TransportType selectedTransport,
     String busRouteNo,
     int busGoBack,
     String trainStationID,
@@ -121,7 +126,7 @@ class TransportData with ChangeNotifier {
 
     Widget tempWidget;
 
-    if (_selectedTransport == 0) {
+    if (_selectedTransport == TransportType.bus) {
       //
       tempWidget = DropdownButton<String>(
         value: _busRouteNo,
@@ -159,7 +164,7 @@ class TransportData with ChangeNotifier {
           );
         }).toList(),
       );
-    } else if (_selectedTransport == 1) {
+    } else if (_selectedTransport == TransportType.train) {
       //
       tempWidget = DropdownButton<String>(
         value: _trainStationID,
@@ -202,7 +207,7 @@ class TransportData with ChangeNotifier {
 
   Future<void> updateDisplayWidget(
     int thisSeq, {
-    int selectedTransport,
+    TransportType selectedTransport,
     String busRouteNo,
     int busGoBack,
     String trainStationID,
@@ -216,7 +221,7 @@ class TransportData with ChangeNotifier {
 
     Widget tempWidget;
 
-    if (_selectedTransport == 0) {
+    if (_selectedTransport == TransportType.bus) {
       try {
         final busStationList = await getBusStationList(_busRouteNo, _busGoBack);
         if (thisSeq != _seq) {
@@ -266,7 +271,7 @@ class TransportData with ChangeNotifier {
           ],
         );
       }
-    } else if (_selectedTransport == 1) {
+    } else if (_selectedTransport == TransportType.train) {
       try {
         final trainList = await getTrainList(_trainStationID, _trainDirection);
         if (thisSeq != _seq) {

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/course.dart';
 import '../providers/courses.dart';
+import '../data/timetable.dart';
 
 class TimetableDayWidget extends StatelessWidget {
   final String day;
@@ -33,7 +34,7 @@ class TimetableDayWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        '${idAndTime[1]}',
+                        '${timeChar2TimeString[idAndTime[1]][0]}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 15.0,
@@ -48,7 +49,7 @@ class TimetableDayWidget extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '${idAndTime[2]}',
+                        '${timeChar2TimeString[idAndTime[2]][1]}',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 15.0,

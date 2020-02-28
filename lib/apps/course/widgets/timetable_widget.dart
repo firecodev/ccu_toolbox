@@ -17,8 +17,10 @@ class _TimetableWidgetState extends State<TimetableWidget>
   void didChangeDependencies() {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final courseData = Provider.of<CourseData>(context, listen: false);
-      courseData.updateTimetableWidget();
+      if (mounted) {
+        final courseData = Provider.of<CourseData>(context, listen: false);
+        courseData.updateTimetableWidget();
+      }
     });
   }
 

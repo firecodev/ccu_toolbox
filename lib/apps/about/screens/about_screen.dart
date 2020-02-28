@@ -21,7 +21,11 @@ class AboutScreen extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: Text('版本: 1.1.2 (build 20200225)'),
+              child: Text('版本: 1.1.3 (build 20200228)'),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Text('行事曆版本: 109.02.27'),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),

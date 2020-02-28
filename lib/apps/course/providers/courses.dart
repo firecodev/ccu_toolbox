@@ -8,7 +8,6 @@ import 'package:html/parser.dart' show parse;
 import 'package:flutter_widgets/flutter_widgets.dart';
 
 import '../functions/kiki.dart' as kiki;
-import '../data/timetable.dart';
 import '../models/course.dart';
 import '../models/timetable.dart';
 import './user_data.dart';
@@ -24,6 +23,17 @@ class CourseData with ChangeNotifier {
     '四': TimetableDay(),
     '五': TimetableDay(),
   };
+  final List colorList = [
+    Color.fromRGBO(209, 255, 251, 1),
+    Color.fromRGBO(209, 255, 212, 1),
+    Color.fromRGBO(246, 255, 209, 1),
+    Color.fromRGBO(255, 229, 209, 1),
+    Color.fromRGBO(255, 209, 209, 1),
+    Color.fromRGBO(209, 225, 255, 1),
+    Color.fromRGBO(221, 209, 255, 1),
+    Color.fromRGBO(255, 209, 255, 1),
+  ];
+  int colorChoice = 0;
 
   StreamController<Widget> courseListWidgetController =
       StreamController.broadcast();
@@ -33,6 +43,8 @@ class CourseData with ChangeNotifier {
       StreamController.broadcast();
 
   ItemScrollController _scrollController = ItemScrollController();
+
+  Map<String, Course> getCourseList() => _courseList;
 
   Future<void> updateAllWidgets(BuildContext context) async {
     updateStatusIndicatorWidget(true, false, context);
@@ -211,6 +223,7 @@ class CourseData with ChangeNotifier {
                   courseType: existingCourse.courseType,
                   period: existingCourse.period,
                   location: existingCourse.location,
+                  color: existingCourse.color,
                 ),
             ifAbsent: () => Course(
                   moodleId: cour['id'],
@@ -300,6 +313,7 @@ class CourseData with ChangeNotifier {
                   courseType: tempCourseType,
                   period: tempPeriod,
                   location: tempLocation,
+                  color: colorList[colorChoice++ % 8],
                 ),
             ifAbsent: () => Course(
                   idnumber: tempIdnumber,
@@ -311,6 +325,7 @@ class CourseData with ChangeNotifier {
                   courseType: tempCourseType,
                   period: tempPeriod,
                   location: tempLocation,
+                  color: colorList[colorChoice++ % 8],
                 ));
       }
     } catch (error) {
@@ -346,19 +361,19 @@ class CourseData with ChangeNotifier {
   List<List<String>> getCoursesByDay(String day) {
     var targetDayData = _timetable[day].time;
     List<List<String>> tempResult = [];
-    String tempStartTime = '00:00';
-    String tempEndTime = '00:00';
+    String tempStartTime = '1';
+    String tempEndTime = '15';
     String tempPreIdnumberNum = '';
     String tempPreIdnumberAlpha = '';
     targetDayData.forEach((time, idnumber) {
       if (time.contains(new RegExp(r'\d+'))) {
         if (idnumber.isNotEmpty) {
           if (idnumber != tempPreIdnumberNum) {
-            tempStartTime = char2Time[time][0];
-            tempEndTime = char2Time[time][1];
+            tempStartTime = time;
+            tempEndTime = time;
             tempResult.add([idnumber, tempStartTime, tempEndTime]);
           } else {
-            tempEndTime = char2Time[time][1];
+            tempEndTime = time;
             tempResult.removeLast();
             tempResult.add([idnumber, tempStartTime, tempEndTime]);
           }
@@ -367,11 +382,11 @@ class CourseData with ChangeNotifier {
       } else {
         if (idnumber.isNotEmpty) {
           if (idnumber != tempPreIdnumberAlpha) {
-            tempStartTime = char2Time[time][0];
-            tempEndTime = char2Time[time][1];
+            tempStartTime = time;
+            tempEndTime = time;
             tempResult.add([idnumber, tempStartTime, tempEndTime]);
           } else {
-            tempEndTime = char2Time[time][1];
+            tempEndTime = time;
             tempResult.removeLast();
             tempResult.add([idnumber, tempStartTime, tempEndTime]);
           }
