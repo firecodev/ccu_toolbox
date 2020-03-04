@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:html/parser.dart' show parse;
 import 'package:flutter_widgets/flutter_widgets.dart';
 
+import '../helpers/db_helper.dart' as db;
 import '../functions/kiki.dart' as kiki;
 import '../models/course.dart';
 import '../models/timetable.dart';
@@ -70,12 +71,10 @@ class CourseData with ChangeNotifier {
       _hasError++;
     }
 
-    if (_hasError < 2) {
-      _courseList = _tempCourseList;
-      buildTimetableFromCourseList();
-      updateCourseListWidget(context);
-      updateTimetableWidget();
-    }
+    _courseList = _tempCourseList;
+    buildTimetableFromCourseList();
+    updateCourseListWidget(context);
+    updateTimetableWidget();
 
     if (_hasError == 0) {
       updateStatusIndicatorWidget(false, false, context);
@@ -277,6 +276,34 @@ class CourseData with ChangeNotifier {
           .getElementsByTagName('table')[1]
           .children[0];
       int courseNum = coursesDOM.children.length - 1;
+
+/* for debugging
+      List<Map<String, String>> testData = [
+        {},
+        {
+          'id': '2101002',
+          'class': '05',
+          'name': '微積分（二）',
+          'teacher': '尤玲凰',
+          'credit': '3',
+          'courseType': '必修',
+          'period': '一4,5 三4,5',
+          'location': '共同教室大樓211',
+        },
+        {
+          'id': '4102085',
+          'class': '01',
+          'name': '離散數學',
+          'teacher': '江振國',
+          'credit': '2',
+          'courseType': '必修',
+          'period': '二E 四E',
+          'location': '創新大樓324',
+        },
+      ];
+      int courseNum = testData.length;
+*/
+
       String tempId = '',
           tempClass = '',
           tempName = '',
@@ -286,6 +313,8 @@ class CourseData with ChangeNotifier {
           tempPeriod = '',
           tempLocation = '',
           tempIdnumber = '';
+
+      await db.DBHelper.deleteAllData('courses');
       for (int i = 1; i <= courseNum; i++) {
         tempId = coursesDOM.children[i].children[1].children[0].innerHtml;
         tempClass = coursesDOM.children[i].children[2].children[0].innerHtml;
@@ -298,6 +327,18 @@ class CourseData with ChangeNotifier {
             coursesDOM.children[i].children[7].children[0].innerHtml.trimLeft();
         tempLocation = coursesDOM.children[i].children[8].children[0].innerHtml;
         tempIdnumber = year + '_' + term + '_' + tempId + '_' + tempClass;
+
+/* for debugging
+        tempId = testData[i]['id'];
+        tempClass = testData[i]['class'];
+        tempName = testData[i]['name'];
+        tempTeacher = testData[i]['teacher'];
+        tempCredit = testData[i]['credit'];
+        tempCourseType = testData[i]['courseType'];
+        tempPeriod = testData[i]['period'];
+        tempLocation = testData[i]['location'];
+        tempIdnumber = year + '_' + term + '_' + tempId + '_' + tempClass;
+*/
 
         _tempCourseList.update(
             tempIdnumber,
@@ -327,8 +368,63 @@ class CourseData with ChangeNotifier {
                   location: tempLocation,
                   color: colorList[colorChoice++ % 8],
                 ));
+        await db.DBHelper.insert('courses', {
+          'idnumber': tempIdnumber,
+          'name': tempName,
+          'id': tempId,
+          'clas': tempClass,
+          'teacher': tempTeacher,
+          'credit': tempCredit,
+          'courseType': tempCourseType,
+          'location': tempLocation,
+          'period': tempPeriod,
+        });
       }
     } catch (error) {
+      final dataList = await db.DBHelper.getData('courses');
+      final oldCourseList = dataList
+          .map((course) => Course(
+                idnumber: course['idnumber'],
+                name: course['name'],
+                id: course['id'],
+                clas: course['clas'],
+                teacher: course['teacher'],
+                credit: course['credit'],
+                courseType: course['courseType'],
+                location: course['location'],
+                period: course['period'],
+              ))
+          .toList();
+      oldCourseList.forEach((course) {
+        _tempCourseList.update(
+            course.idnumber,
+            (existingCourse) => Course(
+                  moodleId: existingCourse.moodleId,
+                  idnumber: existingCourse.idnumber,
+                  name: existingCourse.name,
+                  category: existingCourse.category,
+                  id: course.id,
+                  clas: course.clas,
+                  teacher: course.teacher,
+                  credit: course.credit,
+                  courseType: course.courseType,
+                  period: course.period,
+                  location: course.location,
+                  color: colorList[colorChoice++ % 8],
+                ),
+            ifAbsent: () => Course(
+                  idnumber: course.idnumber,
+                  name: course.name,
+                  id: course.id,
+                  clas: course.clas,
+                  teacher: course.teacher,
+                  credit: course.credit,
+                  courseType: course.courseType,
+                  period: course.period,
+                  location: course.location,
+                  color: colorList[colorChoice++ % 8],
+                ));
+      });
       throw (error);
     }
   }

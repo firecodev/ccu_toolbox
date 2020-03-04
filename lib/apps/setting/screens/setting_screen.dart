@@ -146,7 +146,7 @@ class CourseStartupIndexMenuWidget extends StatefulWidget {
 
 class _CourseStartupIndexMenuWidgetState
     extends State<CourseStartupIndexMenuWidget> {
-  final List<String> indexNameList = ['我的課程', '每日課表'];
+  final List<String> indexNameList = ['我的課程', '每日課表', '每週課表'];
   int dropdownValue = 0;
 
   @override
