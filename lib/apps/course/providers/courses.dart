@@ -430,6 +430,13 @@ class CourseData with ChangeNotifier {
   }
 
   void buildTimetableFromCourseList() {
+    Map<String, TimetableDay> tempTimetable = {
+      '一': TimetableDay(),
+      '二': TimetableDay(),
+      '三': TimetableDay(),
+      '四': TimetableDay(),
+      '五': TimetableDay(),
+    };
     final divideDaysRegex = RegExp(r'[^a-zA-Z\d\s,]([A-J]|\d|,)+',
         multiLine: true, unicode: true); // 三4,5
     final divideChineseRegex =
@@ -442,9 +449,11 @@ class CourseData with ChangeNotifier {
         final String chineseDay =
             divideChineseRegex.allMatches(dayAndTime).toList()[0].group(0);
         divideTimeRegex.allMatches(dayAndTime).forEach((timeRegex) {
-          if (_timetable.containsKey(chineseDay)) {
-            if (_timetable[chineseDay].time.containsKey(timeRegex.group(0))) {
-              _timetable[chineseDay]
+          if (tempTimetable.containsKey(chineseDay)) {
+            if (tempTimetable[chineseDay]
+                .time
+                .containsKey(timeRegex.group(0))) {
+              tempTimetable[chineseDay]
                   .time
                   .update(timeRegex.group(0), (_) => idnumber);
             }
@@ -452,6 +461,7 @@ class CourseData with ChangeNotifier {
         });
       });
     });
+    _timetable = tempTimetable;
   }
 
   List<List<String>> getCoursesByDay(String day) {
