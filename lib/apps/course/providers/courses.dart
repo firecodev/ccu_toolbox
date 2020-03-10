@@ -316,17 +316,35 @@ class CourseData with ChangeNotifier {
 
       await db.DBHelper.deleteAllData('courses');
       for (int i = 1; i <= courseNum; i++) {
-        tempId = coursesDOM.children[i].children[1].children[0].innerHtml;
-        tempClass = coursesDOM.children[i].children[2].children[0].innerHtml;
-        tempName = coursesDOM.children[i].children[3].children[0].innerHtml;
-        tempTeacher = coursesDOM.children[i].children[4].children[0].innerHtml;
-        tempCredit = coursesDOM.children[i].children[5].children[0].innerHtml;
-        tempCourseType =
-            coursesDOM.children[i].children[6].children[0].innerHtml;
-        tempPeriod =
-            coursesDOM.children[i].children[7].children[0].innerHtml.trimLeft();
-        tempLocation = coursesDOM.children[i].children[8].children[0].innerHtml;
-        tempIdnumber = year + '_' + term + '_' + tempId + '_' + tempClass;
+        if (coursesDOM.children[i].children.length == 10) {
+          tempId = coursesDOM.children[i].children[1].children[0].innerHtml;
+          tempClass = coursesDOM.children[i].children[2].children[0].innerHtml;
+          tempName = coursesDOM.children[i].children[3].children[0].innerHtml;
+          tempTeacher =
+              coursesDOM.children[i].children[4].children[0].innerHtml;
+          tempCredit = coursesDOM.children[i].children[5].children[0].innerHtml;
+          tempCourseType =
+              coursesDOM.children[i].children[6].children[0].innerHtml;
+          tempPeriod = coursesDOM.children[i].children[7].children[0].innerHtml
+              .trimLeft();
+          tempLocation =
+              coursesDOM.children[i].children[8].children[0].innerHtml;
+          tempIdnumber = year + '_' + term + '_' + tempId + '_' + tempClass;
+        } else {
+          tempId = coursesDOM.children[i].children[0].children[0].innerHtml;
+          tempClass = coursesDOM.children[i].children[1].children[0].innerHtml;
+          tempName = coursesDOM.children[i].children[2].children[0].innerHtml;
+          tempTeacher =
+              coursesDOM.children[i].children[3].children[0].innerHtml;
+          tempCredit = coursesDOM.children[i].children[4].children[0].innerHtml;
+          tempCourseType =
+              coursesDOM.children[i].children[5].children[0].innerHtml;
+          tempPeriod = coursesDOM.children[i].children[6].children[0].innerHtml
+              .trimLeft();
+          tempLocation =
+              coursesDOM.children[i].children[7].children[0].innerHtml;
+          tempIdnumber = year + '_' + term + '_' + tempId + '_' + tempClass;
+        }
 
 /* for debugging
         tempId = testData[i]['id'];
