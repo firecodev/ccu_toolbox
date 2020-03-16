@@ -7,8 +7,12 @@ class DBHelper {
     return sql.openDatabase(path.join(dbPath, 'courses.db'),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE courses(idnumber TEXT PRIMARY KEY, name TEXT, id TEXT, clas TEXT, teacher TEXT, credit TEXT, courseType TEXT, location TEXT, period TEXT)');
-    }, version: 1);
+          'CREATE TABLE courses(idnumber TEXT PRIMARY KEY, moodleId INTEGER, name TEXT, category TEXT, id TEXT, clas TEXT, teacher TEXT, credit TEXT, courseType TEXT, location TEXT, period TEXT)');
+    }, onUpgrade: (db, oldVersion, newVersion) async {
+      await db.execute('DROP TABLE courses');
+      await db.execute(
+          'CREATE TABLE courses(idnumber TEXT PRIMARY KEY, moodleId INTEGER, name TEXT, category TEXT, id TEXT, clas TEXT, teacher TEXT, credit TEXT, courseType TEXT, location TEXT, period TEXT)');
+    }, version: 2);
   }
 
   static Future<void> insert(String table, Map<String, Object> data) async {
@@ -30,8 +34,12 @@ class DBHelper {
     final sqlDb = await sql.openDatabase(path.join(dbPath, 'courses.db'),
         onCreate: (db, version) {
       return db.execute(
-          'CREATE TABLE courses(idnumber TEXT PRIMARY KEY, name TEXT, id TEXT, clas TEXT, teacher TEXT, credit TEXT, courseType TEXT, location TEXT, period TEXT)');
-    }, version: 1);
+          'CREATE TABLE courses(idnumber TEXT PRIMARY KEY, moodleId INTEGER, name TEXT, category TEXT, id TEXT, clas TEXT, teacher TEXT, credit TEXT, courseType TEXT, location TEXT, period TEXT)');
+    }, onUpgrade: (db, oldVersion, newVersion) async {
+      await db.execute('DROP TABLE courses');
+      await db.execute(
+          'CREATE TABLE courses(idnumber TEXT PRIMARY KEY, moodleId INTEGER, name TEXT, category TEXT, id TEXT, clas TEXT, teacher TEXT, credit TEXT, courseType TEXT, location TEXT, period TEXT)');
+    }, version: 2);
     await sqlDb.execute('DELETE FROM $table');
   }
 }

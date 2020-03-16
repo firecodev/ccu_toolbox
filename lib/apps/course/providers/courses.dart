@@ -13,6 +13,7 @@ import '../models/course.dart';
 import '../models/timetable.dart';
 import './user_data.dart';
 import '../widgets/timetable_day_widget.dart';
+import '../widgets/week_timetable_widget.dart';
 
 class CourseData with ChangeNotifier {
   Map<String, Course> _courseList = {};
@@ -40,6 +41,8 @@ class CourseData with ChangeNotifier {
       StreamController.broadcast();
   StreamController<Widget> timetableWidgetController =
       StreamController.broadcast();
+  StreamController<Widget> weekTimetableWidgetController =
+      StreamController.broadcast();
   StreamController<Widget> statusIndicatorWidgetController =
       StreamController.broadcast();
 
@@ -51,6 +54,14 @@ class CourseData with ChangeNotifier {
     updateStatusIndicatorWidget(true, false, context);
     int _hasError = 0;
     _tempCourseList = {};
+
+    if (_courseList.isEmpty) {
+      await updateCourseListFromDatabase();
+      buildTimetableFromCourseList();
+      updateCourseListWidget(context);
+      updateTimetableWidget();
+      updateWeekTimetableWidget();
+    }
 
     try {
       await updateCoursesFromEcourse(context);
@@ -71,12 +82,16 @@ class CourseData with ChangeNotifier {
       _hasError++;
     }
 
-    _courseList = _tempCourseList;
-    buildTimetableFromCourseList();
-    updateCourseListWidget(context);
-    updateTimetableWidget();
+    if (_hasError < 2) {
+      _courseList = _tempCourseList;
+      buildTimetableFromCourseList();
+      updateCourseListWidget(context);
+      updateTimetableWidget();
+      updateWeekTimetableWidget();
+    }
 
     if (_hasError == 0) {
+      await updateDatabaseFromCourseList();
       updateStatusIndicatorWidget(false, false, context);
     } else {
       updateStatusIndicatorWidget(false, true, context);
@@ -186,6 +201,11 @@ class CourseData with ChangeNotifier {
         );
       }
     }
+  }
+
+  void updateWeekTimetableWidget() {
+    Widget tempWidget = WeekTimetableWidget();
+    weekTimetableWidgetController.sink.add(tempWidget);
   }
 
   Future<void> updateCoursesFromEcourse(BuildContext context) async {
@@ -314,7 +334,6 @@ class CourseData with ChangeNotifier {
           tempLocation = '',
           tempIdnumber = '';
 
-      await db.DBHelper.deleteAllData('courses');
       for (int i = 1; i <= courseNum; i++) {
         if (coursesDOM.children[i].children.length == 10) {
           tempId = coursesDOM.children[i].children[1].children[0].innerHtml;
@@ -386,24 +405,15 @@ class CourseData with ChangeNotifier {
                   location: tempLocation,
                   color: colorList[colorChoice++ % 8],
                 ));
-        await db.DBHelper.insert('courses', {
-          'idnumber': tempIdnumber,
-          'name': tempName,
-          'id': tempId,
-          'clas': tempClass,
-          'teacher': tempTeacher,
-          'credit': tempCredit,
-          'courseType': tempCourseType,
-          'location': tempLocation,
-          'period': tempPeriod,
-        });
       }
     } catch (error) {
       final dataList = await db.DBHelper.getData('courses');
       final oldCourseList = dataList
           .map((course) => Course(
                 idnumber: course['idnumber'],
+                moodleId: course['moodleId'],
                 name: course['name'],
+                category: course['category'],
                 id: course['id'],
                 clas: course['clas'],
                 teacher: course['teacher'],
@@ -417,8 +427,8 @@ class CourseData with ChangeNotifier {
         _tempCourseList.update(
             course.idnumber,
             (existingCourse) => Course(
-                  moodleId: existingCourse.moodleId,
                   idnumber: existingCourse.idnumber,
+                  moodleId: existingCourse.moodleId,
                   name: existingCourse.name,
                   category: existingCourse.category,
                   id: course.id,
@@ -432,7 +442,9 @@ class CourseData with ChangeNotifier {
                 ),
             ifAbsent: () => Course(
                   idnumber: course.idnumber,
+                  moodleId: course.moodleId,
                   name: course.name,
+                  category: course.category,
                   id: course.id,
                   clas: course.clas,
                   teacher: course.teacher,
@@ -445,6 +457,45 @@ class CourseData with ChangeNotifier {
       });
       throw (error);
     }
+  }
+
+  Future<void> updateDatabaseFromCourseList() async {
+    await db.DBHelper.deleteAllData('courses');
+    await Future.forEach<Course>(_courseList.values, (course) {
+      return db.DBHelper.insert('courses', {
+        'idnumber': course.idnumber,
+        'moodleId': course.moodleId,
+        'name': course.name,
+        'category': course.category,
+        'id': course.id,
+        'clas': course.clas,
+        'teacher': course.teacher,
+        'credit': course.credit,
+        'courseType': course.courseType,
+        'location': course.location,
+        'period': course.period,
+      });
+    });
+  }
+
+  Future<void> updateCourseListFromDatabase() async {
+    final dataList = await db.DBHelper.getData('courses');
+    _courseList = Map.fromIterable(dataList,
+        key: (course) => course['idnumber'] as String,
+        value: (course) => Course(
+              idnumber: course['idnumber'],
+              moodleId: course['moodleId'],
+              name: course['name'],
+              category: course['category'],
+              id: course['id'],
+              clas: course['clas'],
+              teacher: course['teacher'],
+              credit: course['credit'],
+              courseType: course['courseType'],
+              location: course['location'],
+              period: course['period'],
+              color: colorList[colorChoice++ % 8],
+            ));
   }
 
   void buildTimetableFromCourseList() {

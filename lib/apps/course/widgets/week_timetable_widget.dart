@@ -5,9 +5,6 @@ import '../providers/courses.dart';
 import '../data/timetable.dart';
 
 class WeekTimetableWidget extends StatefulWidget {
-  final GlobalKey key;
-  WeekTimetableWidget(this.key);
-
   @override
   _WeekTimetableWidgetState createState() => _WeekTimetableWidgetState();
 }

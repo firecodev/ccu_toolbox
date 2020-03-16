@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/courses.dart';
 import '../widgets/courses_list.dart';
 import '../widgets/timetable_widget.dart';
-import '../widgets/week_timetable_widget.dart';
+import '../widgets/week_timetable_stream_widget.dart';
 
 class CourseOverviewScreen extends StatefulWidget {
   final startupIndex;
@@ -16,17 +16,13 @@ class CourseOverviewScreen extends StatefulWidget {
 }
 
 class _CourseOverviewScreenState extends State<CourseOverviewScreen> {
-  Widget tempTimetableWidget = Container();
-  final GlobalKey weekTimetableWidgetKey = GlobalKey();
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final courseData = Provider.of<CourseData>(context, listen: false);
-      courseData.updateAllWidgets(context).then((_) {
-        weekTimetableWidgetKey.currentState?.setState(() {});
-      });
+      courseData.updateAllWidgets(context);
     });
   }
 
@@ -108,7 +104,7 @@ class _CourseOverviewScreenState extends State<CourseOverviewScreen> {
           children: <Widget>[
             CourseListWidget(),
             TimetableWidget(),
-            WeekTimetableWidget(weekTimetableWidgetKey),
+            WeekTimetableStreamWidget(),
             // Text(
             //     '呃...不好意思，開發者是大衣小菜機，成績資料過少，沒辦法確定和分析資料格式，暫時無法開發，待資料足夠定速速補上，真的很抱歉...'),
           ],
