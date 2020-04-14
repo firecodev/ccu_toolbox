@@ -72,17 +72,17 @@ class CourseData with ChangeNotifier {
             arguments: '/apps/course');
         return;
       } else {
-        _hasError++;
+        _hasError+=1;
       }
     }
 
     try {
       await updateCoursesFromKiki(context);
     } catch (error) {
-      _hasError++;
+      _hasError+=10;
     }
 
-    if (_hasError < 2) {
+    if (_hasError < 11) {
       _courseList = _tempCourseList;
       buildTimetableFromCourseList();
       updateCourseListWidget(context);
@@ -93,6 +93,9 @@ class CourseData with ChangeNotifier {
     if (_hasError == 0) {
       await updateDatabaseFromCourseList();
       updateStatusIndicatorWidget(false, false, context);
+    } else if (_hasError == 1){
+      await updateDatabaseFromCourseList();
+      updateStatusIndicatorWidget(false, true, context);
     } else {
       updateStatusIndicatorWidget(false, true, context);
     }

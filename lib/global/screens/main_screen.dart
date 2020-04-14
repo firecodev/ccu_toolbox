@@ -35,7 +35,7 @@ class MainScreen extends StatelessWidget {
                     height: 5.0,
                   ),
                   Text(
-                    'Make your CCU life easier.',
+                    'eCourse2相關功能可能暫時無法使用，敬請見諒',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 15.0,

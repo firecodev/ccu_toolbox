@@ -86,7 +86,7 @@ class _AuthCardState extends State<AuthCard> {
       } else if (error == 2) {
         _showErrorDialog('帳號或密碼錯誤');
       } else {
-        _showErrorDialog(error);
+        _showErrorDialog('登入錯誤');
       }
     }
 

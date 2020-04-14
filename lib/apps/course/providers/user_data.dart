@@ -4,6 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+import '../functions/kiki.dart' as kiki;
+
 class UserData with ChangeNotifier{
   String _username = '';
   String _password = '';
@@ -15,7 +17,8 @@ class UserData with ChangeNotifier{
     if (username != null && password != null) {
       if (username.isNotEmpty && password.isNotEmpty) {
         try {
-          _ecourse2Token = await _requestEcourse2Token(username, password);
+          //_ecourse2Token = await _requestEcourse2Token(username, password);
+          await kiki.getSessionid(username, password);
           _username = username;
           _password = password;
           if (savePref) {
