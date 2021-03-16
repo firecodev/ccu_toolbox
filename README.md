@@ -1,6 +1,7 @@
 # CCU Toolbox
 
-
+This project has moved to ccu_toolbox_v2
+https://github.com/firecodev/ccu_toolbox_v2
 
 ### 目前功能 Feature
 
